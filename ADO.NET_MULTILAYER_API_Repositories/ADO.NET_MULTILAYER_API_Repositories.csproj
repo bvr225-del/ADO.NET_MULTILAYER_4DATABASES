@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ADO.NET_MULTILAYER_API_BusinessEntities\ADO.NET_MULTILAYER_API_BusinessEntities.csproj" />
+    <ProjectReference Include="..\ADO.NET_MULTILAYER_API_DbConnectivity\ADO.NET_MULTILAYER_API_DbConnectivity.csproj" />
+  </ItemGroup>
+
 </Project>
