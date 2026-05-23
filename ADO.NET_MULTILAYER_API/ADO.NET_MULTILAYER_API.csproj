@@ -10,4 +10,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ADO.NET_MULTILAYER_API_BusinessEntities\ADO.NET_MULTILAYER_API_BusinessEntities.csproj" />
+    <ProjectReference Include="..\ADO.NET_MULTILAYER_API_DbConnectivity\ADO.NET_MULTILAYER_API_DbConnectivity.csproj" />
+    <ProjectReference Include="..\ADO.NET_MULTILAYER_API_Repositories\ADO.NET_MULTILAYER_API_Repositories.csproj" />
+    <ProjectReference Include="..\ADO.NET_MULTILAYER_API_Services\ADO.NET_MULTILAYER_API_Services.csproj" />
+  </ItemGroup>
+
 </Project>
