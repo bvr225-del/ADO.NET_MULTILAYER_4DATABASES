@@ -24,5 +24,12 @@ namespace ADO.NET_MULTILAYER_API_DbConnectivity.data
             return con;
 
         }
+
+        public SqlConnection Northwind_DB_UATsqlconnectionstring()
+        {
+            var connectionString = Convert.ToString(_configuration.GetSection(ConnectionStringNames.Northwind_DB_UATsqlconnectionstring).Value);
+            SqlConnection con = new SqlConnection(connectionString);
+            return con;
+        }
     }
 }
