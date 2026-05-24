@@ -11,5 +11,7 @@ namespace ADO.NET_MULTILAYER_API_BusinessEntities.Interfaces
     {
         SqlConnection hotelmanagement_UATsqlconnectionstring();
         SqlConnection Northwind_DB_UATsqlconnectionstring();
+
+        SqlConnection MIDLAND_UATsqlconnectionstring();
     }
 }
