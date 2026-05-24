@@ -22,6 +22,13 @@ namespace ADO.NET_MULTILAYER_API_BusinessEntities.Utils
         public static string UpdateDepartment = "Usp_UpdateDepartment";
         public static string DeleteDepartment = "Usp_DeleteDepartment";
         #endregion
+        #region Orders Related Stored Procedures
+        public static string GetOrders = "Usp_GetOrders";
+        public static string GetOrderById = "Usp_GetOrderById";
+        public static string AddOrder = "Usp_AddOrder";
+        public static string UpdateOrder = "Usp_UpdateOrder";
+        public static string DeleteOrder = "Usp_DeleteOrder";
+        #endregion
 
 
     }
