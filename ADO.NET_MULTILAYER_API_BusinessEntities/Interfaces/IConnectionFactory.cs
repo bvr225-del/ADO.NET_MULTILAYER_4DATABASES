@@ -10,5 +10,6 @@ namespace ADO.NET_MULTILAYER_API_BusinessEntities.Interfaces
     public interface IConnectionFactory
     {
         SqlConnection hotelmanagement_UATsqlconnectionstring();
+        SqlConnection Northwind_DB_UATsqlconnectionstring();
     }
 }

@@ -15,6 +15,14 @@ namespace ADO.NET_MULTILAYER_API_BusinessEntities.Utils
         public static string UpdateEmployee = "Usp_UpdateEmployee";
         public static string DeleteEmployee = "Usp_DeleteEmployee";
         #endregion
+        #region Department Related StoredProcedures
+        public static string AddDepartment = "Usp_AddDepartment";
+        public static string GetDepartments = "Usp_GetDepartments";
+        public static string GetDepartmentById = "Usp_GetDepartmentById";
+        public static string UpdateDepartment = "Usp_UpdateDepartment";
+        public static string DeleteDepartment = "Usp_DeleteDepartment";
+        #endregion
+
 
     }
 }

@@ -9,5 +9,6 @@ namespace ADO.NET_MULTILAYER_API_BusinessEntities.Utils
     public static class ConnectionStringNames
     {
         public static string HotelManagement_UATsqlconnectionstring = "ConnectionStrings:hotelmanagement_UATsqlconnectionstring";
+        public static string Northwind_DB_UATsqlconnectionstring = "ConnectionStrings:Northwind_DB_UATsqlconnectionstring";
     }
 }
