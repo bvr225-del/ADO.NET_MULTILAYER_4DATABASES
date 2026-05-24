@@ -22,5 +22,6 @@ namespace ADO.NET_MULTILAYER_API_Services.AutoMapper
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
         }
+
     }
 }
