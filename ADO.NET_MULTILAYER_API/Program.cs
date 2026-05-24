@@ -17,6 +17,10 @@ builder.Services.AddSingleton<IConnectionFactory, ConnectionFactory>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 //=====================================================================
+#region AutoMapper Adding To DependencyInjection Container
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+#endregion
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
