@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ADO.NET_MULTILAYER_API_BusinessEntities\ADO.NET_MULTILAYER_API_BusinessEntities.csproj" />
+    <ProjectReference Include="..\ADO.NET_MULTILAYER_API_Repositories\ADO.NET_MULTILAYER_API_Repositories.csproj" />
+  </ItemGroup>
+
 </Project>
