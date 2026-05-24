@@ -20,6 +20,12 @@ namespace ADO.NET_MULTILAYER_API_BusinessEntities.Utils
         public static string DepartmentLocation = "@deptlocation";
         public static string DepartmentInsertValue = "@insertvalue";
         #endregion
+        #region Orders Related Stored Procedure Parameters
+        public static string OrderId = "@orderid";
+        public static string OrderName = "@ordername";
+        public static string OrderLocation = "@orderlocation";
+        public static string OrderInsertValue = "@insertvalue";
+        #endregion
 
     }
 }
