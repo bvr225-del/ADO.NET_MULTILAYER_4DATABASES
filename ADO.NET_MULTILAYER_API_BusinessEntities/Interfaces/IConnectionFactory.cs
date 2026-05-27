@@ -13,5 +13,6 @@ namespace ADO.NET_MULTILAYER_API_BusinessEntities.Interfaces
         SqlConnection Northwind_DB_UATsqlconnectionstring();
 
         SqlConnection MIDLAND_UATsqlconnectionstring();
+        SqlConnection RestaurantDB_UATSqlConnectionString();
     }
 }
