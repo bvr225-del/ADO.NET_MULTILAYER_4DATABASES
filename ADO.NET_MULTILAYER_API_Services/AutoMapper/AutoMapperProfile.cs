@@ -19,6 +19,8 @@ namespace ADO.NET_MULTILAYER_API_Services.AutoMapper
             CreateMap<Employee, EmployeeDto>();
             CreateMap<OrderDto, Orders>();
             CreateMap<Orders, OrderDto>();
+            CreateMap<RestaurantDto, Restaurant>();
+            CreateMap<Restaurant, RestaurantDto>();
 
         }
     }

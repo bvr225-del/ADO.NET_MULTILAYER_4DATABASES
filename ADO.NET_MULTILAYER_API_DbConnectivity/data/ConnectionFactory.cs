@@ -38,5 +38,13 @@ namespace ADO.NET_MULTILAYER_API_DbConnectivity.data
             SqlConnection con = new SqlConnection(connectionString);
             return con;
         }
+
+        public SqlConnection RestaurantDB_UATSqlConnectionString()
+        {
+            var connectionString = Convert.ToString(_configuration.GetSection(ConnectionStringNames.RestaurantDB_UATSqlConnectionString).Value);
+            SqlConnection con = new SqlConnection(connectionString);
+            return con;
+
+        }
     }
 }
