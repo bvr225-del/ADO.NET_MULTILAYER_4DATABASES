@@ -26,6 +26,14 @@ namespace ADO.NET_MULTILAYER_API_BusinessEntities.Utils
         public static string OrderLocation = "@orderlocation";
         public static string OrderInsertValue = "@insertvalue";
         #endregion
+        #region Restaurant Parameters
+        public static string ID = "@Id";
+        public static string RestaurantName = "@RestaurantName";
+        public static string RestaurantLocation = "@RestaurantLocation";
+        public static string CreationDate = "@CreationDate";
+        public static string RestaurantInsertValue = "@Insertvalue";
+        #endregion
+
 
     }
 }
