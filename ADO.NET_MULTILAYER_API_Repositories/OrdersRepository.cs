@@ -8,18 +8,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using Serilog;
 
 namespace ADO.NET_MULTILAYER_API_Repositories
 {
     public class OrdersRepository : IOrdersRepository
     {
         private readonly IConnectionFactory _connectionFactory;
-        public OrdersRepository(IConnectionFactory connectionFactory)
+        private readonly ILoggingFactory _loggerFactory;
+        public OrdersRepository(IConnectionFactory connectionFactory,ILoggingFactory loggerFactory)
         {
             _connectionFactory = connectionFactory;
+            _loggerFactory = loggerFactory;
         }
         public async Task<int> AddOrder(Orders order)
         {
+            Log.Information("Orders Repository:AddOrder API method execution started");
+            await _loggerFactory.AddLoggingMessages("venkat","information", "Orders Repository:AddOrder API method execution started");
+
             using (SqlConnection con = _connectionFactory.MIDLAND_UATsqlconnectionstring())
             {
                 SqlCommand cmd = new SqlCommand(StoredProcedures.AddOrder, con);
@@ -33,13 +39,15 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                 DataSet ds = new DataSet();
                 da.Fill(ds, "Orders");
                 var res = (int)cmd.Parameters[StoredProcedureParameters.OrderInsertValue].Value;
+                Log.Information($"Orders Repository:AddOrder API method execution ended with OrdersInsertValue:insertvalue");
+                await _loggerFactory.AddLoggingMessages("venkat", "information", $"Orders Repository:AddOrder API method execution ended with OrdersInsertValue:insertvalue");
                 return res;
             }
-
         }
-
         public async Task<bool> DeleteOrder(int orderid)
         {
+            Log.Information("Orders Repository:DeleteOrder API method execution started");
+            await _loggerFactory.AddLoggingMessages("venkat", "information", "Orders Repository:DeleteOrder API method execution started");
             var result = await GetOrderById(orderid);
             if (result.orderid > 0)
             {
@@ -51,17 +59,21 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     DataSet ds = new DataSet();
                     da.Fill(ds, "Orders");
+                    Log.Information("Orders Repository:DeleteOrder API method execution ended");
+                    await _loggerFactory.AddLoggingMessages("venkat", "information", "Orders Repository:DeleteOrder API method execution ended");
                     return true;
                 }
             }
             else
             {
-                return false;
 
+                return false;
             }
         }
         public async Task<Orders> GetOrderById(int orderid)
         {
+            Log.Information("Orders Repository:GetOrderById API method execution started");
+            await _loggerFactory.AddLoggingMessages("venkat", "information", "Orders Repository:GetOrderById API method execution started");
             Orders order = new Orders();
             using (SqlConnection con = _connectionFactory.MIDLAND_UATsqlconnectionstring())
             {
@@ -73,20 +85,21 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                 da.Fill(ds, "Orders");
                 foreach (DataRow dr in ds.Tables["Orders"].Rows)
                 {
-
                     order.orderid = Convert.ToInt32(dr["orderid"]);
                     order.ordername = Convert.ToString(dr["ordername"]);
                     order.orderlocation = Convert.ToString(dr["orderlocation"]);
-
                 }
             }
+            Log.Information("Orders Repository:GetOrderById API method execution ended");
+            await _loggerFactory.AddLoggingMessages("venkat", "information", "Orders Repository:GetOrderById API method execution completed");
+
             return order;
-
-
         }
-
         public async Task<List<Orders>> GetOrders()
         {
+            Log.Information("Orders Repository:GetOrders API method execution started");
+            await _loggerFactory.AddLoggingMessages("venkat", "information", "Orders Repository:GetOrders API method execution started");
+
             using (SqlConnection con = _connectionFactory.MIDLAND_UATsqlconnectionstring())
             {
                 SqlCommand cmd = new SqlCommand(StoredProcedures.GetOrders, con);
@@ -103,19 +116,21 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                     order.orderlocation = Convert.ToString(dr["orderlocation"]);
                     ordersList.Add(order);
                 }
+                Log.Information("Orders Repository:GetOrders API method execution completed");
+                await _loggerFactory.AddLoggingMessages("venkat", "information", "Orders Repository:GetOrders API method execution completed");
+
                 return ordersList;
             }
-
-
-
         }
 
         public async Task<bool> UpdateOrder(Orders order)
         {
+            Log.Information("Orders Repository:UpdateOrder API method execution started");
+            await _loggerFactory.AddLoggingMessages("venkat", "information", "Orders Repository:UpdateOrder API method execution started");
+
             var result = await GetOrderById(order.orderid);
             if (result.orderid > 0)
             {
-
                 using (SqlConnection con = _connectionFactory.MIDLAND_UATsqlconnectionstring())
                 {
                     SqlCommand cmd = new SqlCommand(StoredProcedures.UpdateOrder, con);
@@ -126,6 +141,9 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     DataSet ds = new DataSet();
                     da.Fill(ds, "Orders");
+                    Log.Information("Orders Repository:UpdateOrder API method execution completed");
+                    await _loggerFactory.AddLoggingMessages("venkat", "information", "Orders Repository:UpdateOrder API method execution completed");
+
                     return true;
                 }
             }

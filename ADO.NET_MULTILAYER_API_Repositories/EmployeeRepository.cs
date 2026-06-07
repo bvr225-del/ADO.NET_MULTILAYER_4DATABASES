@@ -7,20 +7,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using Serilog;
 
 using ADO.NET_MULTILAYER_API_BusinessEntities.Utils;
+using ADO.NET_MULTILAYER_API_DbConnectivity.data;
 namespace ADO.NET_MULTILAYER_API_Repositories
 {
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly IConnectionFactory _connectionFactory;
-        public EmployeeRepository(IConnectionFactory connectionFactory)
+        private readonly ILoggingFactory _loggingFactory;
+        public EmployeeRepository(IConnectionFactory connectionFactory, ILoggingFactory loggingFactory)
         {
             _connectionFactory = connectionFactory;
+            _loggingFactory = loggingFactory;
         }
         public async Task<int> AddEmployee(Employee empdetail)
         {
-            using(SqlConnection con=_connectionFactory.hotelmanagement_UATsqlconnectionstring())
+           Log.Information("EmployeeRepository: AddEmployee  method execution starts");
+            await _loggingFactory.AddLoggingMessages("venkat","information","EmployeeRepository: AddEmployee  method execution starts");
+            using (SqlConnection con=_connectionFactory.hotelmanagement_UATsqlconnectionstring())
             { SqlCommand cmd=new SqlCommand(StoredProcedures.AddEmployee, con);
                 cmd.CommandType=CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue(StoredProcedureParameters.EmployeeName, empdetail.empname);
@@ -32,6 +38,11 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                 DataSet ds=new DataSet();
                 da.Fill(ds,"Employee");
                 var employeeCount=(int)cmd.Parameters[StoredProcedureParameters.EmplyeeInsertvalue].Value;
+                Log.Information("EmployeeRepository: AddEmployee  method execution completed successfully");
+                await _loggingFactory.AddLoggingMessages("venkat","information","EmployeeRepository: AddEmployee  method execution completed successfully");
+
+                Log.Information($"EmployeeRepository:AddEmployee Method executed successfully with EmployeeInsertedId:{employeeCount}");
+                await _loggingFactory.AddLoggingMessages("venkat","information",$"EmployeeRepository:AddEmployee Method executed successfully with EmployeeInsertedId:{employeeCount}");
                 return employeeCount;
 
 
@@ -42,6 +53,8 @@ namespace ADO.NET_MULTILAYER_API_Repositories
 
         public async Task<bool> DeleteEmployee(int empid)
         {
+            Log.Information("EmployeeRepository: DeleteEmployee  method execution starts");
+            await _loggingFactory.AddLoggingMessages("venkat","information","EmployeeRepository: DeleteEmployee  method execution starts");
             var result = await GetEmployeeById(empid);
             if (result.empid > 0)
             {
@@ -54,6 +67,10 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                     DataSet ds = new DataSet();
                     da.Fill(ds, "Employee");
                 }
+                Log.Information("EmployeeRepository: DeleteEmployee  method execution completed successfully");
+                await _loggingFactory.AddLoggingMessages("venkat","information","EmployeeRepository: DeleteEmployee  method execution completed successfully");
+                Log.Information($"EmployeeRepository: Employee with id {empid} deleted successfully");
+                await _loggingFactory.AddLoggingMessages("venkat","information",$"EmployeeRepository: Employee with id {empid} deleted successfully");
                 return true;
             }
             else
@@ -66,6 +83,8 @@ namespace ADO.NET_MULTILAYER_API_Repositories
 
         public async Task<List<Employee>> GetAllEmployees()
         {
+            Log.Information("EmployeeRepository: GetAllEmployees  method execution starts");
+            await _loggingFactory.AddLoggingMessages("venkat","information","EmployeeRepository: GetAllEmployees  method execution starts");
             using (SqlConnection con = _connectionFactory.hotelmanagement_UATsqlconnectionstring())
             {
                 SqlCommand cmd=new SqlCommand(StoredProcedures.GetEmployees, con);
@@ -82,6 +101,8 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                     emp.empsalary=Convert.ToInt32(dr["empsalary"]);
                     employees.Add(emp);
                 }
+                    Log.Information("EmployeeRepository: GetAllEmployees  method execution completed successfully");
+                    await _loggingFactory.AddLoggingMessages("venkat","information","EmployeeRepository: GetAllEmployees  method execution completed successfully");
                 return employees;
             }
 
@@ -91,6 +112,8 @@ namespace ADO.NET_MULTILAYER_API_Repositories
 
         public async Task<Employee> GetEmployeeById(int empid)
         {
+            Log.Information("EmployeeRepository: GetEmployeeById  method execution starts");
+            await _loggingFactory.AddLoggingMessages("venkat","information","EmployeeRepository: GetEmployeeById  method execution starts");
             Employee emp = new Employee();
 
             using (SqlConnection con = _connectionFactory.hotelmanagement_UATsqlconnectionstring())
@@ -108,6 +131,8 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                    
                 }
             }
+            Log.Information("EmployeeRepository: GetEmployeeById  method execution completed successfully");
+            await _loggingFactory.AddLoggingMessages("venkat","information","EmployeeRepository: GetEmployeeById  method execution completed successfully");
             return emp;
 
 
@@ -116,6 +141,8 @@ namespace ADO.NET_MULTILAYER_API_Repositories
 
         public async Task<bool> UpdateEmployee(Employee empdetail)
         {
+                Log.Information("EmployeeRepository: UpdateEmployee  method execution starts");
+                await _loggingFactory.AddLoggingMessages("venkat","information","EmployeeRepository: UpdateEmployee  method execution starts");
             var result = await GetEmployeeById(empdetail.empid);
             if (result.empid > 0)
             {
@@ -130,11 +157,15 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     DataSet ds = new DataSet();
                     da.Fill(ds, "Employee");
+                    Log.Information("EmployeeRepository: UpdateEmployee  method execution completed successfully");
+                    await _loggingFactory.AddLoggingMessages("venkat","information","EmployeeRepository: UpdateEmployee  method execution completed successfully");
                     return true;
                 }
             }
             else
             {
+                Log.Information($"EmployeeRepository: Employee with id {empdetail.empid} not found for update");
+                await _loggingFactory.AddLoggingMessages("venkat","information",$"EmployeeRepository: Employee with id {empdetail.empid} not found for update");
                 return false;
             }
 
