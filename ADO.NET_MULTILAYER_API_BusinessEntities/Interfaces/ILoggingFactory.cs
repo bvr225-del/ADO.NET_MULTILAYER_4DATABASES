@@ -9,6 +9,6 @@ namespace ADO.NET_MULTILAYER_API_BusinessEntities.Interfaces
     public interface ILoggingFactory
     {
         Task<bool>AddLoggingMessages(string username, string LogLevel, string MessageTemplate);
-        Task<bool> AddProjectLevelErrorLogAsync(string StatusCode, string ErrorMessage, string StackTraceError, string InnerExceptionError);
+        Task<bool> AddProjectLevelErrorLogAsync(string StatusCode, string ErrorMessage, string StackTraceError, string InnerExceptionError,string userName);
     }
 }

@@ -48,6 +48,7 @@ namespace ADO.NET_MULTILAYER_API_BusinessEntities.Utils
         public static string ErrorMessage = "@ErrorMessage";
         public static string StackTraceError = "@StackTraceError";
         public static string InnerExceptionError = "@InnerExceptionError";
+        public static string UserName = "@UserName";
         #endregion
 
     }

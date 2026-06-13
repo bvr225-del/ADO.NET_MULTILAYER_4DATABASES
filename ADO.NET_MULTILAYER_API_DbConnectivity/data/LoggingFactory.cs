@@ -42,12 +42,13 @@ namespace ADO.NET_MULTILAYER_API_DbConnectivity.data
 
         }
 
-        public async Task<bool> AddProjectLevelErrorLogAsync(string StatusCode, string ErrorMessage, string StackTraceError, string InnerExceptionError)
+        public async Task<bool> AddProjectLevelErrorLogAsync(string StatusCode, string ErrorMessage, string StackTraceError, string InnerExceptionError, string userName)
         {
             using (SqlConnection con = _connectionFactory.hotelmanagement_UATsqlconnectionstring())
             {
                 SqlCommand cmd = new SqlCommand(StoredProcedures.AddProjectLevelErrorLog, con);
                 cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue(StoredProcedureParameters.UserName, userName);
                 cmd.Parameters.AddWithValue(StoredProcedureParameters.StatusCode, StatusCode);
                 cmd.Parameters.AddWithValue(StoredProcedureParameters.ErrorMessage, ErrorMessage);
                 cmd.Parameters.AddWithValue(StoredProcedureParameters.StackTraceError, StackTraceError);

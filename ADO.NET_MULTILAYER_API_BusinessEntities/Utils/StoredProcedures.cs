@@ -47,5 +47,19 @@ namespace ADO.NET_MULTILAYER_API_BusinessEntities.Utils
         #region ProjectLevelErrorLog Stored Procedures
         public static string AddProjectLevelErrorLog = "Usp_AddProjectLevelErrorlog";
         #endregion
+
+        #region TokenBasedAuthentication storedprocedures
+        public static readonly string GetUserRolesInformation = "Usp_GetUserRolesInformation";
+
+        public static readonly string SignIn = "Usp_LoginCheck";
+
+        public static readonly string Usp_UserResgistration = "Usp_UserResgistration";
+
+        public static readonly string Usp_RolesResgistration = "Usp_RolesResgistration";
+
+        public static readonly string Usp_UserRolesMapping = "Usp_UserRolesMapping";
+
+        #endregion
+
     }
 }

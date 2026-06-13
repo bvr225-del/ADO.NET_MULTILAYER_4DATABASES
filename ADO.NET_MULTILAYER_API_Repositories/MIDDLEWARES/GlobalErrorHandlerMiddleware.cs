@@ -17,12 +17,14 @@ namespace ADO.NET_MULTILAYER_API_Repositories.MIDDLEWARES
         private readonly RequestDelegate _next;        //RequestDelegate Process The HttpRequest.
 
         private readonly ILoggingFactory _loggingFactory;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public GlobalErrorHandlerMiddleware(RequestDelegate next, ILoggingFactory loggingFactory)
+        public GlobalErrorHandlerMiddleware(RequestDelegate next, ILoggingFactory loggingFactory,IHttpContextAccessor httpContextAccessor)
         {        // Middleware constructor takes the next RequestDelegate in the pipeline
 
             _next = next;
             _loggingFactory = loggingFactory;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task InvokeAsync(HttpContext context)
         {//HttpContext is predfeined class,it  represents all the information about an individual HTTP request and response.
@@ -42,7 +44,8 @@ namespace ADO.NET_MULTILAYER_API_Repositories.MIDDLEWARES
             }
             catch (Exception error)
             {
-                await _loggingFactory.AddLoggingMessages("venkat", "Information", "GlobalErrorHandlerMiddleware: Excution Starts");//logg the message in database using custom logging factory
+                var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
+                await _loggingFactory.AddLoggingMessages(userName, "Information", "GlobalErrorHandlerMiddleware: Excution Starts");//logg the message in database using custom logging factory
                 var response = context.Response;//here we are getting the response object from the http context to set the status code and content type for the error response.
                 response.ContentType = "application/json";
                 switch (error)
@@ -69,9 +72,9 @@ namespace ADO.NET_MULTILAYER_API_Repositories.MIDDLEWARES
                     InnerExceptionError = error?.InnerException?.ToString()
                 });
                 //here log the messages in the text file by using serilog.
-                Log.Error("Custom Failure: {@StatusCode}, {@ErrorMessage}, {@StackTraceError},{@InnerExceptionError}",
+                Log.Error("Custom Failure: {@StatusCode}, {@ErrorMessage}, {@StackTraceError},{@InnerExceptionError},LoggedinCurrnetUsername is:{@Username}",
                 response.StatusCode.ToString(), Convert.ToString(error?.Message), Convert.ToString(error?.StackTrace), Convert.ToString(error?.InnerException));
-                await _loggingFactory.AddLoggingMessages("venkat", "Error", $"Custom Failure: StatusCode:{response.StatusCode}, ErrorMessage:{Convert.ToString(error?.Message)}, StackTraceError:{Convert.ToString(error?.StackTrace)}, InnerExceptionError:{Convert.ToString(error?.InnerException)}");
+                await _loggingFactory.AddLoggingMessages(userName, "Error", $"Custom Failure: StatusCode:{response.StatusCode}, ErrorMessage:{Convert.ToString(error?.Message)}, StackTraceError:{Convert.ToString(error?.StackTrace)}, InnerExceptionError:{Convert.ToString(error?.InnerException)}");
                 //here log the message in our project text file by using serilog.
                 //in sqlserver database also we are logging the exceptions.
                 //in Azure application insights  we are logging the exceptions
@@ -79,12 +82,12 @@ namespace ADO.NET_MULTILAYER_API_Repositories.MIDDLEWARES
                 //in  network log also some of the companies log the error messages.
                 //here log the messages in sql server database.
 
-                await _loggingFactory.AddProjectLevelErrorLogAsync(response.StatusCode.ToString(), Convert.ToString(error?.Message), Convert.ToString(error?.StackTrace), Convert.ToString(error?.InnerException));
+                await _loggingFactory.AddProjectLevelErrorLogAsync(response.StatusCode.ToString(), Convert.ToString(error?.Message), Convert.ToString(error?.StackTrace), Convert.ToString(error?.InnerException),userName);
 
                 //.......Write The logic In Future Based on Your Cloud Usage requirment.
                 //If you use Azure cloud,Add the Azure Application Insights Logic Here.To Log The Exceptions in Azure cloud.
                 //If You use Aws cloud Add the Aws CloudWatchLogic Here.To Log The exceptions In Aws cloud.
-                await _loggingFactory.AddLoggingMessages("venkat", "Information", "GlobalErrorHandlerMiddleware: Excution Ends");//logg the message in database using custom logging factory
+                await _loggingFactory.AddLoggingMessages("userName", "Information", "GlobalErrorHandlerMiddleware: Excution Ends");//logg the message in database using custom logging factory
                 var errorFriendlyMessage = new ProblemDetails
                 {
                     Type = "API Exception",
