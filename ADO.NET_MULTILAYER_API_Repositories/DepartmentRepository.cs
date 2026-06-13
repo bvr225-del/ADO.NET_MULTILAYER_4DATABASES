@@ -8,18 +8,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using ADO.NET_MULTILAYER_API_BusinessEntities.Utils;
+using Serilog;
 
 namespace ADO.NET_MULTILAYER_API_Repositories
 {
     public class DepartmentRepository : IDepartmentRepository
     {
         private readonly IConnectionFactory _connectionFactory;
-        public DepartmentRepository(IConnectionFactory connectionFactory)
+        private readonly ILoggingFactory _loggingFactory;
+        public DepartmentRepository(IConnectionFactory connectionFactory, ILoggingFactory loggingFactory)
         {
             _connectionFactory = connectionFactory;
+            _loggingFactory = loggingFactory;
         }
         public async Task<int> AddDepartment(Department department)
         {
+            Log.Information("DepartmentRepository: AddDepartment method execution started");
+            await _loggingFactory.AddLoggingMessages("venkat", "information", "DepartmentRepository: AddDepartment method execution started");
             using (SqlConnection con = _connectionFactory.Northwind_DB_UATsqlconnectionstring())
             {
                 SqlCommand cmd = new SqlCommand(StoredProcedures.AddDepartment, con);
@@ -33,6 +38,11 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                 DataSet ds = new DataSet();
                 da.Fill(ds, "Department");
                 var deptCount = (int)cmd.Parameters[StoredProcedureParameters.DepartmentInsertValue].Value;
+                Log.Information("DepartmentRepository: AddDepartment method execution completed");
+                await _loggingFactory.AddLoggingMessages("venkat", "information", "DepartmentRepository: AddDepartment method execution completed");
+
+                Log.Information($"DepartmentRepository: AddDepartment method execution completed with DepartmentInsert value: {deptCount}");
+                await _loggingFactory.AddLoggingMessages("venkat", "information", $"DepartmentRepository: AddDepartment method execution completed with DepartmentInsert value: {deptCount}");
                 return deptCount;
             }
 
@@ -40,6 +50,8 @@ namespace ADO.NET_MULTILAYER_API_Repositories
 
         public async Task<bool> DeleteDepartment(int deptid)
         {
+            Log.Information("DepartmentRepository: DeleteDepartment method execution started");
+            await _loggingFactory.AddLoggingMessages("venkat", "information", "DepartmentRepository: DeleteDepartment method execution started");
             var result = await GetDepartmentById(deptid);
             if (result.deptid > 0)
             {
@@ -51,16 +63,23 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     DataSet ds = new DataSet();
                     da.Fill(ds, "Department");
+
+                    Log.Information($"DepartmentRepository: DeleteDepartment method execution completed with DepartmentId: {deptid}");
+                    await _loggingFactory.AddLoggingMessages("venkat", "information", $"DepartmentRepository: DeleteDepartment method execution completed with DepartmentId: {deptid}");
                     return true;
                 }
             }
             else
             {
+                    Log.Information($"DepartmentRepository: DeleteDepartment method execution failed. Department not found with deptid: {deptid}");
+                    await _loggingFactory.AddLoggingMessages("venkat", "information", $"DepartmentRepository: DeleteDepartment method execution failed. Department not found with deptid: {deptid}");
                 return false;
             }
         }
         public async Task<Department> GetDepartmentById(int deptid)
         {
+            Log.Information("DepartmentRepository: GetDepartmentById method execution started");
+            await _loggingFactory.AddLoggingMessages("venkat","information", "DepartmentRepository: GetDepartmentById method execution started");
             Department department = new Department();
 
             using (SqlConnection con = _connectionFactory.Northwind_DB_UATsqlconnectionstring())
@@ -78,12 +97,16 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                     department.deptlocation = Convert.ToString(dr["deptlocation"]);
                 }
             }
+            Log.Information($"DepartmentRepository: GetDepartmentById method execution ended with DepartmentId:{deptid}");
+            await _loggingFactory.AddLoggingMessages("venkat","information", $"DepartmentRepository: GetDepartmentById method ended with DepartmentId:{deptid}");
             return department;
 
         }
 
         public async Task<List<Department>> GetDepartments()
         {
+            Log.Information("DepartmentRepository: GetDepartment method execution started");
+            await _loggingFactory.AddLoggingMessages("venkat","information", "DepartmentRepository: GetDepartment method execution started");
             using (SqlConnection con = _connectionFactory.Northwind_DB_UATsqlconnectionstring())
             {
                 SqlCommand cmd = new SqlCommand(StoredProcedures.GetDepartments, con);
@@ -100,12 +123,16 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                     department.deptlocation = Convert.ToString(dr["deptlocation"]);
                     listDepts.Add(department);
                 }
+                Log.Information("DepartmentRepository: GetDepartmentById method execution ended");
+                await _loggingFactory.AddLoggingMessages("venkat","information", "DepartmentRepository: GetDepartment method execution ended");
                 return listDepts;
             }
         }
 
         public async Task<bool> UpdateDepartment(Department department)
         {
+            Log.Information("DepartmentRepository: UpdateDepartment method execution started");
+            await _loggingFactory.AddLoggingMessages("venkat","information", "DepartmentRepository: UpdateGetDepartment method execution started");
             var result = await GetDepartmentById(department.deptid);
             if (result.deptid > 0)
             {
@@ -119,11 +146,16 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     DataSet ds = new DataSet();
                     da.Fill(ds, "Department");
+
+                    Log.Information("DepartmentRepository: UpdateDepartment method execution ended");
+                    await _loggingFactory.AddLoggingMessages("venkat","information", "DepartmentRepository: UpdateDepartment method execution ended");
                     return true;
                 }
             }
             else
             {
+                Log.Information($"DepartmentRepository: UpdateDepartment method execution failed. Department not found with deptid: {department.deptid}");
+                await _loggingFactory.AddLoggingMessages("venkat", "information", $"DepartmentRepository: UpdateDepartment method execution failed. Department not found with deptid: {department.deptid}");
                 return false;
             }
         }

@@ -15,6 +15,7 @@ namespace ADO.NET_MULTILAYER_API_BusinessEntities.Utils
         public static string UpdateEmployee = "Usp_UpdateEmployee";
         public static string DeleteEmployee = "Usp_DeleteEmployee";
         #endregion
+
         #region Department Related StoredProcedures
         public static string AddDepartment = "Usp_AddDepartment";
         public static string GetDepartments = "Usp_GetDepartments";
@@ -22,6 +23,7 @@ namespace ADO.NET_MULTILAYER_API_BusinessEntities.Utils
         public static string UpdateDepartment = "Usp_UpdateDepartment";
         public static string DeleteDepartment = "Usp_DeleteDepartment";
         #endregion
+
         #region Orders Related Stored Procedures
         public static string GetOrders = "Usp_GetOrders";
         public static string GetOrderById = "Usp_GetOrderById";
@@ -29,6 +31,7 @@ namespace ADO.NET_MULTILAYER_API_BusinessEntities.Utils
         public static string UpdateOrder = "Usp_UpdateOrder";
         public static string DeleteOrder = "Usp_DeleteOrder";
         #endregion
+
         #region         #region restaurant storedprocedures
         public static string AddRestaurant = "Usp_AddRestaurant";
         public static string UpdateRestaurant = "Usp_UpdateRestaurant";
@@ -37,6 +40,12 @@ namespace ADO.NET_MULTILAYER_API_BusinessEntities.Utils
         public static string GetRestaurantById = "Usp_GetRestaurantById";
         #endregion
 
+        #region ProjectLevelLog Stored Procedures
+        public static string AddLoggingMessages = "Usp_ProjectLevelLog";
+        #endregion
 
+        #region ProjectLevelErrorLog Stored Procedures
+        public static string AddProjectLevelErrorLog = "Usp_AddProjectLevelErrorlog";
+        #endregion
     }
 }

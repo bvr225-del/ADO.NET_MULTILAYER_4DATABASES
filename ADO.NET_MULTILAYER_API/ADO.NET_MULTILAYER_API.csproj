@@ -17,4 +17,8 @@
     <ProjectReference Include="..\ADO.NET_MULTILAYER_API_Services\ADO.NET_MULTILAYER_API_Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Logs\" />
+  </ItemGroup>
+
 </Project>
