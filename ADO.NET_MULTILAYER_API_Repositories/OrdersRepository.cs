@@ -1,14 +1,15 @@
 ﻿using ADO.NET_MULTILAYER_API_BusinessEntities.Interfaces;
 using ADO.NET_MULTILAYER_API_BusinessEntities.Models;
 using ADO.NET_MULTILAYER_API_BusinessEntities.Utils;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
+using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data;
-using Serilog;
 
 namespace ADO.NET_MULTILAYER_API_Repositories
 {
@@ -16,15 +17,20 @@ namespace ADO.NET_MULTILAYER_API_Repositories
     {
         private readonly IConnectionFactory _connectionFactory;
         private readonly ILoggingFactory _loggerFactory;
-        public OrdersRepository(IConnectionFactory connectionFactory,ILoggingFactory loggerFactory)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public OrdersRepository(IConnectionFactory connectionFactory,ILoggingFactory loggerFactory,IHttpContextAccessor httpContextAccessor)
         {
             _connectionFactory = connectionFactory;
             _loggerFactory = loggerFactory;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<int> AddOrder(Orders order)
         {
-            Log.Information("Orders Repository:AddOrder API method execution started");
-            await _loggerFactory.AddLoggingMessages("venkat","information", "Orders Repository:AddOrder API method execution started");
+            var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
+
+            Log.Information($"Orders Repository:AddOrder API method execution started and Current Loggedin username:{userName}");
+            await _loggerFactory.AddLoggingMessages(userName,"information", "Orders Repository:AddOrder API method execution started");
 
             using (SqlConnection con = _connectionFactory.MIDLAND_UATsqlconnectionstring())
             {
@@ -40,14 +46,16 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                 da.Fill(ds, "Orders");
                 var res = (int)cmd.Parameters[StoredProcedureParameters.OrderInsertValue].Value;
                 Log.Information($"Orders Repository:AddOrder API method execution ended with OrdersInsertValue:insertvalue");
-                await _loggerFactory.AddLoggingMessages("venkat", "information", $"Orders Repository:AddOrder API method execution ended with OrdersInsertValue:insertvalue");
+                await _loggerFactory.AddLoggingMessages(userName, "information", $"Orders Repository:AddOrder API method execution ended with OrdersInsertValue:insertvalue");
                 return res;
             }
         }
         public async Task<bool> DeleteOrder(int orderid)
         {
-            Log.Information("Orders Repository:DeleteOrder API method execution started");
-            await _loggerFactory.AddLoggingMessages("venkat", "information", "Orders Repository:DeleteOrder API method execution started");
+            var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
+
+            Log.Information($"Orders Repository:DeleteOrder API method execution started and Current Loggedin username:{userName}");
+            await _loggerFactory.AddLoggingMessages(userName, "information", "Orders Repository:DeleteOrder API method execution started");
             var result = await GetOrderById(orderid);
             if (result.orderid > 0)
             {
@@ -60,7 +68,7 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                     DataSet ds = new DataSet();
                     da.Fill(ds, "Orders");
                     Log.Information("Orders Repository:DeleteOrder API method execution ended");
-                    await _loggerFactory.AddLoggingMessages("venkat", "information", "Orders Repository:DeleteOrder API method execution ended");
+                    await _loggerFactory.AddLoggingMessages(userName, "information", "Orders Repository:DeleteOrder API method execution ended");
                     return true;
                 }
             }
@@ -72,8 +80,10 @@ namespace ADO.NET_MULTILAYER_API_Repositories
         }
         public async Task<Orders> GetOrderById(int orderid)
         {
-            Log.Information("Orders Repository:GetOrderById API method execution started");
-            await _loggerFactory.AddLoggingMessages("venkat", "information", "Orders Repository:GetOrderById API method execution started");
+            var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
+
+            Log.Information($"Orders Repository:GetOrderById API method execution started and Current Loggedin username:{userName}");
+            await _loggerFactory.AddLoggingMessages(userName, "information", "Orders Repository:GetOrderById API method execution started");
             Orders order = new Orders();
             using (SqlConnection con = _connectionFactory.MIDLAND_UATsqlconnectionstring())
             {
@@ -91,14 +101,16 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                 }
             }
             Log.Information("Orders Repository:GetOrderById API method execution ended");
-            await _loggerFactory.AddLoggingMessages("venkat", "information", "Orders Repository:GetOrderById API method execution completed");
+            await _loggerFactory.AddLoggingMessages(userName, "information", "Orders Repository:GetOrderById API method execution completed");
 
             return order;
         }
         public async Task<List<Orders>> GetOrders()
         {
-            Log.Information("Orders Repository:GetOrders API method execution started");
-            await _loggerFactory.AddLoggingMessages("venkat", "information", "Orders Repository:GetOrders API method execution started");
+            var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
+
+            Log.Information($"Orders Repository:GetOrders API method execution started and Current Loggedin username:{userName}");
+            await _loggerFactory.AddLoggingMessages(userName, "information", "Orders Repository:GetOrders API method execution started");
 
             using (SqlConnection con = _connectionFactory.MIDLAND_UATsqlconnectionstring())
             {
@@ -117,7 +129,7 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                     ordersList.Add(order);
                 }
                 Log.Information("Orders Repository:GetOrders API method execution completed");
-                await _loggerFactory.AddLoggingMessages("venkat", "information", "Orders Repository:GetOrders API method execution completed");
+                await _loggerFactory.AddLoggingMessages(userName, "information", "Orders Repository:GetOrders API method execution completed");
 
                 return ordersList;
             }
@@ -125,8 +137,10 @@ namespace ADO.NET_MULTILAYER_API_Repositories
 
         public async Task<bool> UpdateOrder(Orders order)
         {
-            Log.Information("Orders Repository:UpdateOrder API method execution started");
-            await _loggerFactory.AddLoggingMessages("venkat", "information", "Orders Repository:UpdateOrder API method execution started");
+            var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
+
+            Log.Information($"Orders Repository:UpdateOrder API method execution started and Current Loggedin username:{userName}");
+            await _loggerFactory.AddLoggingMessages(userName, "information", "Orders Repository:UpdateOrder API method execution started");
 
             var result = await GetOrderById(order.orderid);
             if (result.orderid > 0)
@@ -142,7 +156,7 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                     DataSet ds = new DataSet();
                     da.Fill(ds, "Orders");
                     Log.Information("Orders Repository:UpdateOrder API method execution completed");
-                    await _loggerFactory.AddLoggingMessages("venkat", "information", "Orders Repository:UpdateOrder API method execution completed");
+                    await _loggerFactory.AddLoggingMessages(userName, "information", "Orders Repository:UpdateOrder API method execution completed");
 
                     return true;
                 }

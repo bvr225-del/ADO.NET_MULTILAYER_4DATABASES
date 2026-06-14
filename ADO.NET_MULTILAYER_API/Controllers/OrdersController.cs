@@ -13,25 +13,30 @@ namespace ADO.NET_MULTILAYER_API.Controllers
     {
         private readonly IOrderService _orderService;
         private readonly ILoggingFactory _loggerFactory;
-        public OrdersController(IOrderService orderService,ILoggingFactory loggerFactory)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public OrdersController(IOrderService orderService,ILoggingFactory loggerFactory,IHttpContextAccessor httpContextAccessor)
         {
             _orderService = orderService;
             _loggerFactory = loggerFactory;
+            _httpContextAccessor = httpContextAccessor;
         }
         [HttpPost]
         [Route("AddOrder")]
         public async Task<IActionResult> AddOrder(OrderDto order)
         {
+            var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
+
             #region serilog
-            Log.Information("OrdersController:AddOrder API method execution started");
+            Log.Information($"OrdersController:AddOrder API method execution started and Current Loggedin username:{userName}");
             Log.Information($"OrdersController:input parameter OrderName:{order.ordername}");
             Log.Information($"OrdersController:input parameter OrderLocation:{order.orderlocation}");
             #endregion
 
             #region Database log
-            await _loggerFactory.AddLoggingMessages("venkat","information", "OrdersController:AddOrder API method execution started");
-            await _loggerFactory.AddLoggingMessages("venkat","information", $"OrdersController:input parameter OrderName:{order.ordername}");
-            await _loggerFactory.AddLoggingMessages("venkat", "information", $"OrdersController:input parameter OrderLocation:{order.orderlocation}");
+            await _loggerFactory.AddLoggingMessages(userName,"information", "OrdersController:AddOrder API method execution started");
+            await _loggerFactory.AddLoggingMessages(userName, "information", $"OrdersController:input parameter OrderName:{order.ordername}");
+            await _loggerFactory.AddLoggingMessages(userName, "information", $"OrdersController:input parameter OrderLocation:{order.orderlocation}");
             #endregion 
 
 
@@ -43,7 +48,7 @@ namespace ADO.NET_MULTILAYER_API.Controllers
                 else
                 {
                 Log.Information("OrdersController:AddOrder API method execution ended");
-                await _loggerFactory.AddLoggingMessages("venkat", "information", "OrdersController:AddOrder API method execution ended");
+                await _loggerFactory.AddLoggingMessages(userName, "information", "OrdersController:AddOrder API method execution ended");
 
                 return StatusCode(StatusCodes.Status201Created, "created successfully");
                 }
@@ -53,13 +58,15 @@ namespace ADO.NET_MULTILAYER_API.Controllers
         [Route("DeleteOrder/{orderid}")]
         public async Task<IActionResult> DeleteOrder(int orderid)
         {
+            var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
+
             #region serilog
-            Log.Information("OrdersController:DeleteOrder API method execution started");
+            Log.Information($"OrdersController:DeleteOrder API method execution started and Current Loggedin username:{userName}");
             Log.Information($"OrdersController:input parameter OrderId:{orderid}");
             #endregion
             #region database log
-            await _loggerFactory.AddLoggingMessages("venkat", "information", "OrdersController:DeleteOrder API method execution started");
-            await _loggerFactory.AddLoggingMessages("venkat", "information", $"OrdersController:input parameter OrderId:{orderid}");
+            await _loggerFactory.AddLoggingMessages(userName, "information", "OrdersController:DeleteOrder API method execution started");
+            await _loggerFactory.AddLoggingMessages(userName, "information", $"OrdersController:input parameter OrderId:{orderid}");
             #endregion
 
 
@@ -74,7 +81,7 @@ namespace ADO.NET_MULTILAYER_API.Controllers
                 else
                 {
                 Log.Information("OrdersController:DeleteOrder API method execution ended");
-                await _loggerFactory.AddLoggingMessages("venkat", "information", "OrdersController:DeleteOrder API method execution ended");
+                await _loggerFactory.AddLoggingMessages(userName, "information", "OrdersController:DeleteOrder API method execution ended");
                 return StatusCode(StatusCodes.Status200OK, "deleted successfully");
                 }
         }
@@ -82,13 +89,15 @@ namespace ADO.NET_MULTILAYER_API.Controllers
         [Route("GetOrderById/{orderid}")]
         public async Task<IActionResult> GetOrderById(int orderid)
         {
+            var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
+
             #region serilog
-            Log.Information("OrdersController:GetOrderById API method execution started");
+            Log.Information($"OrdersController:GetOrderById API method execution started and Current Loggedin username:{userName}");
             Log.Information($"OrdersController:input parameter OrderId:{orderid}");
             #endregion
             #region database log
-            await _loggerFactory.AddLoggingMessages("venkat", "information", "OrdersController:GetOrderById API method execution started");
-            await _loggerFactory.AddLoggingMessages("venkat", "information", $"OrdersController:input parameter OrderId:{orderid}");
+            await _loggerFactory.AddLoggingMessages(userName, "information", "OrdersController:GetOrderById API method execution started");
+            await _loggerFactory.AddLoggingMessages(userName, "information", $"OrdersController:input parameter OrderId:{orderid}");
             #endregion
 
 
@@ -101,7 +110,7 @@ namespace ADO.NET_MULTILAYER_API.Controllers
                 else
                 {
                 Log.Information("OrdersController:GetOrderById API method execution ended");
-                await _loggerFactory.AddLoggingMessages("venkat", "information", "OrdersController:GetOrderById API method execution ended");
+                await _loggerFactory.AddLoggingMessages(userName, "information", "OrdersController:GetOrderById API method execution ended");
 
                 return StatusCode(StatusCodes.Status200OK, res);
                 }
@@ -110,11 +119,13 @@ namespace ADO.NET_MULTILAYER_API.Controllers
         [Route("GetOrders")]
         public async Task<IActionResult> GetOrders()
         {
+            var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
+
             #region serilog
-            Log.Information("OrdersController:GetOrders API method execution started");
+            Log.Information($"OrdersController:GetOrders API method execution started and Current Loggedin username:{userName}");
             #endregion
             #region database log
-            await _loggerFactory.AddLoggingMessages("venkat", "information", "OrdersController:GetOrders API method execution started");
+            await _loggerFactory.AddLoggingMessages(userName, "information", "OrdersController:GetOrders API method execution started");
             #endregion 
 
 
@@ -126,7 +137,7 @@ namespace ADO.NET_MULTILAYER_API.Controllers
                 else
                 {
                 Log.Information("OrdersController:GetOrders API method execution started");
-                await _loggerFactory.AddLoggingMessages("venkat", "information", "OrdersController:GetOrders API method execution started");
+                await _loggerFactory.AddLoggingMessages(userName, "information", "OrdersController:GetOrders API method execution started");
                 return StatusCode(StatusCodes.Status200OK, res);
                 }
         }
@@ -134,18 +145,20 @@ namespace ADO.NET_MULTILAYER_API.Controllers
         [Route("UpdateOrder")]
         public async Task<IActionResult> UpdateOrder(OrderDto order)
         {
+            var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
+
             #region serilog
-            Log.Information("OrdersController:UpdateOrder API method execution started");
+            Log.Information($"OrdersController:UpdateOrder API method execution started and Current Loggedin username:{userName}");
             Log.Information($"OrdersController:input parameter OrderId:{order.orderid}");
             Log.Information($"OrdersController:input parameter OrderName:{order.ordername}");
             Log.Information($"OrdersController:input parameter OrderLocation:{order.orderlocation}");
             #endregion
 
             #region Database log
-            await _loggerFactory.AddLoggingMessages("venkat", "information", "OrdersController:UpdateOrder API method execution started");
-            await _loggerFactory.AddLoggingMessages("venkat", "information", $"OrdersController:input parameter OrderId:{order.orderid}");
-            await _loggerFactory.AddLoggingMessages("venkat", "information", $"OrdersController:input parameter OrderName:{order.ordername}");
-            await _loggerFactory.AddLoggingMessages("venkat", "information", $"OrdersController:input parameter OrderLocation:{order.orderlocation}");
+            await _loggerFactory.AddLoggingMessages(userName, "information", "OrdersController:UpdateOrder API method execution started");
+            await _loggerFactory.AddLoggingMessages(userName, "information", $"OrdersController:input parameter OrderId:{order.orderid}");
+            await _loggerFactory.AddLoggingMessages(userName, "information", $"OrdersController:input parameter OrderName:{order.ordername}");
+            await _loggerFactory.AddLoggingMessages(userName, "information", $"OrdersController:input parameter OrderLocation:{order.orderlocation}");
             #endregion 
             var res = await _orderService.UpdateOrder(order);
                 if (res == false)
@@ -155,7 +168,7 @@ namespace ADO.NET_MULTILAYER_API.Controllers
                 else
                 {
                 Log.Information("OrdersController:UpdateOrder API method execution ended");
-                await _loggerFactory.AddLoggingMessages("venkat", "information", "OrdersController:UpdateOrder API method execution ended");
+                await _loggerFactory.AddLoggingMessages(userName, "information", "OrdersController:UpdateOrder API method execution ended");
                 return StatusCode(StatusCodes.Status200OK, "updated successfully");
                 }
         }

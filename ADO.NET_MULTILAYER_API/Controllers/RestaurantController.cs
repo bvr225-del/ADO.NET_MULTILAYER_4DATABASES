@@ -1,5 +1,6 @@
 ﻿using ADO.NET_MULTILAYER_API_BusinessEntities.Dtos;
 using ADO.NET_MULTILAYER_API_BusinessEntities.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -7,28 +8,34 @@ namespace ADO.NET_MULTILAYER_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class RestaurantController : ControllerBase
     {
         private readonly IRestaurantService _restaurantService;
         private readonly ILoggingFactory _loggerFactory;
-        public RestaurantController(IRestaurantService restaurantService,ILoggingFactory loggerFactory)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public RestaurantController(IRestaurantService restaurantService,ILoggingFactory loggerFactory,IHttpContextAccessor httpContextAccessor)
         {
             _restaurantService = restaurantService;
             _loggerFactory = loggerFactory;
+            _httpContextAccessor = httpContextAccessor;
         }
         [HttpPost]
         [Route("AddRestaurant")]
         public async Task<IActionResult> Post([FromBody] RestaurantDto Objres)
         {//dtos are used to transafer the data purpose used.
+            var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
+
             #region serilog
-            Log.Information("RestaurantController:AddRestaurant API method execution started");
+            Log.Information($"RestaurantController:AddRestaurant API method execution started and Current Loggedin username:{userName}");
             Log.Information($"RestaurantController:called input parameter Restaurant Name:{Objres.RestaurantName}");
             Log.Information($"RestaurantController:called input parameter Restaurant Location:{Objres.RestaurantLocation}");
             #endregion
             #region database log
-            await _loggerFactory.AddLoggingMessages("venkat","information", "RestaurantController:AddRestaurant API method execution started");
-            await _loggerFactory.AddLoggingMessages("venkat","information", $"RestaurantController:called input parameter Restaurant Name:{Objres.RestaurantName}");
-            await _loggerFactory.AddLoggingMessages("venkat","information", $"RestaurantController:called input parameter Restaurant Location:{Objres.RestaurantLocation}");
+            await _loggerFactory.AddLoggingMessages(userName,"information", "RestaurantController:AddRestaurant API method execution started");
+            await _loggerFactory.AddLoggingMessages(userName, "information", $"RestaurantController:called input parameter Restaurant Name:{Objres.RestaurantName}");
+            await _loggerFactory.AddLoggingMessages(userName,"information", $"RestaurantController:called input parameter Restaurant Location:{Objres.RestaurantLocation}");
             #endregion
 
             if (!ModelState.IsValid)
@@ -39,7 +46,7 @@ namespace ADO.NET_MULTILAYER_API.Controllers
                 {
                     var resdata = await _restaurantService.AddRestaurant(Objres);
                 Log.Information("RestaurantController:AddRestaurant API method execution ended successfully");
-                await _loggerFactory.AddLoggingMessages("venkat", "information", "RestaurantController:AddRestaurant API method execution ended successfully");
+                await _loggerFactory.AddLoggingMessages(userName, "information", "RestaurantController:AddRestaurant API method execution ended successfully");
                 return StatusCode(StatusCodes.Status201Created, resdata);
                 }
         }
@@ -47,13 +54,15 @@ namespace ADO.NET_MULTILAYER_API.Controllers
         [Route("DeleteRestaurantById/{Id}")]
         public async Task<IActionResult> delete(int Id)
         {
+            var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
+
             #region serilog
-            Log.Information("RestaurantController:DeleteRestaurantById API method execution started");
+            Log.Information($"RestaurantController:DeleteRestaurantById API method execution started and Current Loggedin username:{userName}");
             Log.Information($"RestaurantController:called input parameter Restaurant ID:{Id}");
             #endregion
             #region database log
-            await _loggerFactory.AddLoggingMessages("venkat", "information", "RestaurantController:DeleteRestaurantById API method execution started");
-            await _loggerFactory.AddLoggingMessages("venkat", "information", $"RestaurantController:called input parameter Restaurant ID:{Id}");
+                await _loggerFactory.AddLoggingMessages(userName, "information", "RestaurantController:DeleteRestaurantById API method execution started");
+                await _loggerFactory.AddLoggingMessages(userName, "information", $"RestaurantController:called input parameter Restaurant ID:{Id}");
             #endregion
 
             if (Id < 0)
@@ -76,11 +85,13 @@ namespace ADO.NET_MULTILAYER_API.Controllers
         [Route("GetallRestaurants")]
         public async Task<IActionResult> GetallRestaurants()
         {
+            var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
+
             #region serilog
-            Log.Information("RestaurantController:GetRestaurants API method execution started");
+            Log.Information($"RestaurantController:GetRestaurants API method execution started and Current Loggedin username:{userName}");
             #endregion
             #region database log
-            await _loggerFactory.AddLoggingMessages("venkat", "information", "RestaurantController:GetRestaurants API method execution started");
+            await _loggerFactory.AddLoggingMessages(userName, "information", "RestaurantController:GetRestaurants API method execution started");
             #endregion
 
             var resdata = await _restaurantService.GetallRestaurants();
@@ -91,7 +102,7 @@ namespace ADO.NET_MULTILAYER_API.Controllers
                 else
                 {
                 Log.Information("RestaurantController:GetRestaurants API method execution ended successfully");
-                await _loggerFactory.AddLoggingMessages("venkat", "information", "RestaurantController:GetRestaurants API method execution ended successfully");
+                await _loggerFactory.AddLoggingMessages(userName, "information", "RestaurantController:GetRestaurants API method execution ended successfully");
                 return StatusCode(StatusCodes.Status200OK, resdata);
                 }
 
@@ -100,13 +111,15 @@ namespace ADO.NET_MULTILAYER_API.Controllers
         [Route("GetRestaurantById/{Id}")]
         public async Task<IActionResult> GetRestaurantById(int Id)
         {
+            var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
+
             #region serilog
-            Log.Information("RestaurantController:GetRestaurantById API method execution started");
+            Log.Information($"RestaurantController:GetRestaurantById API method execution started and Current Loggedin username:{userName}");
             Log.Information($"RestaurantController:called input parameter Restaurant ID:{Id}");
             #endregion
             #region database log
-            await _loggerFactory.AddLoggingMessages("venkat", "information", "RestaurantController:GetRestaurantById API method execution started");
-            await _loggerFactory.AddLoggingMessages("venkat", "information", $"RestaurantController:called input parameter Restaurant ID:{Id}");
+            await _loggerFactory.AddLoggingMessages(userName, "information", "RestaurantController:GetRestaurantById API method execution started");
+            await _loggerFactory.AddLoggingMessages(userName, "information", $"RestaurantController:called input parameter Restaurant ID:{Id}");
             #endregion
 
             if (Id < 0)
@@ -115,24 +128,26 @@ namespace ADO.NET_MULTILAYER_API.Controllers
             }
                 var resdata = await _restaurantService.GetRestaurantById(Id);
             Log.Information("RestaurantController:GetRestaurantById API method execution ended successfully");
-            await _loggerFactory.AddLoggingMessages("venkat", "information", "RestaurantController:GetRestaurantById API method execution ended successfully");
+            await _loggerFactory.AddLoggingMessages(userName, "information", "RestaurantController:GetRestaurantById API method execution ended successfully");
             return StatusCode(StatusCodes.Status200OK, resdata);
         }
         [HttpPut]
         [Route("UpdateRestaurant")]
         public async Task<IActionResult> put([FromBody] RestaurantDto Objres)
         {
+            var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
+
             #region serilog
-            Log.Information("RestaurantController:UpdateRestaurant API method execution started");
+            Log.Information($"RestaurantController:UpdateRestaurant API method execution started and Current Loggedin username:{userName}");
             Log.Information($"RestaurantController:called input parameter Restaurant ID:{Objres.Id}");
             Log.Information($"RestaurantController:called input parameter Restaurant Name:{Objres.RestaurantName}");
             Log.Information($"RestaurantController:called input parameter Restaurant Location:{Objres.RestaurantLocation}");
             #endregion
             #region database log
-            await _loggerFactory.AddLoggingMessages("venkat", "information", "RestaurantController:UpdateRestaurant API method execution started");
-            await _loggerFactory.AddLoggingMessages("venkat", "information", $"RestaurantController:called input parameter Restaurant ID:{Objres.Id}");
-            await _loggerFactory.AddLoggingMessages("venkat", "information", $"RestaurantController:called input parameter Restaurant Name:{Objres.RestaurantName}");
-            await _loggerFactory.AddLoggingMessages("venkat", "information", $"RestaurantController:called input parameter Restaurant Location:{Objres.RestaurantLocation}");
+            await _loggerFactory.AddLoggingMessages(userName, "information", "RestaurantController:UpdateRestaurant API method execution started");
+            await _loggerFactory.AddLoggingMessages(userName, "information", $"RestaurantController:called input parameter Restaurant ID:{Objres.Id}");
+            await _loggerFactory.AddLoggingMessages(userName, "information", $"RestaurantController:called input parameter Restaurant Name:{Objres.RestaurantName}");
+            await _loggerFactory.AddLoggingMessages(userName, "information", $"RestaurantController:called input parameter Restaurant Location:{Objres.RestaurantLocation}");
             #endregion
             var resdata = await _restaurantService.UpdateRestaurant(Objres);
 
@@ -143,7 +158,7 @@ namespace ADO.NET_MULTILAYER_API.Controllers
                 else
                 {
                 Log.Information("RestaurantController:UpdateRestaurant API method execution ended successfully");
-                await _loggerFactory.AddLoggingMessages("venkat", "information", "RestaurantController:UpdateRestaurant API method execution ended successfully");
+                await _loggerFactory.AddLoggingMessages(userName, "information", "RestaurantController:UpdateRestaurant API method execution ended successfully");
                 return StatusCode(StatusCodes.Status200OK, resdata);
                 }
         }
