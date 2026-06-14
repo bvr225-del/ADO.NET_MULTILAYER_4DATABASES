@@ -124,7 +124,6 @@ namespace ADO.NET_MULTILAYER_API.Controllers
             await _loggingFactory.AddLoggingMessages(userName, "information", "DepartmentController: GetDepartments method Execution starts");
             #endregion
 
-            throw new Exception("Custom Exception:Employee Controller:Post API method failed");
 
             var res = await _departmentService.GetDepartments();
                 if (res == null || res.Count == 0)

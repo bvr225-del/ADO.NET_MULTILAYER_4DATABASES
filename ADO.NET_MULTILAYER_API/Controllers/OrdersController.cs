@@ -69,10 +69,6 @@ namespace ADO.NET_MULTILAYER_API.Controllers
             await _loggerFactory.AddLoggingMessages(userName, "information", $"OrdersController:input parameter OrderId:{orderid}");
             #endregion
 
-
-
-
-
             var res = await _orderService.DeleteOrder(orderid);
                 if (res == false)
                 {
@@ -99,9 +95,6 @@ namespace ADO.NET_MULTILAYER_API.Controllers
             await _loggerFactory.AddLoggingMessages(userName, "information", "OrdersController:GetOrderById API method execution started");
             await _loggerFactory.AddLoggingMessages(userName, "information", $"OrdersController:input parameter OrderId:{orderid}");
             #endregion
-
-
-
             var res = await _orderService.GetOrderById(orderid);
                 if (res == null)
                 {

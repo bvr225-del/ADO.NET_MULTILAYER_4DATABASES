@@ -15,7 +15,7 @@ namespace ADO.NET_MULTILAYER_API_Services
 {
     public class RestaurantService : IRestaurantService
     {
-        public readonly IRestaurantRepository _restaurantRepository;
+        private readonly IRestaurantRepository _restaurantRepository;
         private readonly IMapper _mapper;
         private readonly ILoggingFactory _loggingFactory;
         private readonly IHttpContextAccessor _httpContextAccessor;
