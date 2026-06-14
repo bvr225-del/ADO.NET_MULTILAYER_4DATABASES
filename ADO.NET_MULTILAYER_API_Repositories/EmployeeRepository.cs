@@ -30,7 +30,7 @@ namespace ADO.NET_MULTILAYER_API_Repositories
             var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
 
             Log.Information($"EmployeeRepository: AddEmployees method Excution Starts and Current Loggedin username:{userName}");
-            await _loggingFactory.AddLoggingMessages("UserName","information","EmployeeRepository: AddEmployee  method execution starts");
+            await _loggingFactory.AddLoggingMessages(userName,"information","EmployeeRepository: AddEmployee  method execution starts");
             using (SqlConnection con=_connectionFactory.hotelmanagement_UATsqlconnectionstring())
             { SqlCommand cmd=new SqlCommand(StoredProcedures.AddEmployee, con);
                 cmd.CommandType=CommandType.StoredProcedure;
@@ -44,10 +44,10 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                 da.Fill(ds,"Employee");
                 var employeeCount=(int)cmd.Parameters[StoredProcedureParameters.EmplyeeInsertvalue].Value;
                 Log.Information("EmployeeRepository: AddEmployee  method execution completed successfully");
-                await _loggingFactory.AddLoggingMessages("UserName", "information","EmployeeRepository: AddEmployee  method execution completed successfully");
+                await _loggingFactory.AddLoggingMessages(userName, "information","EmployeeRepository: AddEmployee  method execution completed successfully");
 
                 Log.Information($"EmployeeRepository:AddEmployee Method executed successfully with EmployeeInsertedId:{employeeCount}");
-                await _loggingFactory.AddLoggingMessages("UserName","information",$"EmployeeRepository:AddEmployee Method executed successfully with EmployeeInsertedId:{employeeCount}");
+                await _loggingFactory.AddLoggingMessages(userName,"information",$"EmployeeRepository:AddEmployee Method executed successfully with EmployeeInsertedId:{employeeCount}");
                 return employeeCount;
 
             }
@@ -59,7 +59,7 @@ namespace ADO.NET_MULTILAYER_API_Repositories
             var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
 
             Log.Information($"EmployeeRepository: DeleteEmployeeById method Excution Starts and Current Loggedin username:{userName}");
-            await _loggingFactory.AddLoggingMessages("UserName","information","EmployeeRepository: DeleteEmployee  method execution starts");
+            await _loggingFactory.AddLoggingMessages(userName,"information","EmployeeRepository: DeleteEmployee  method execution starts");
             var result = await GetEmployeeById(empid);
             if (result.empid > 0)
             {
@@ -73,9 +73,9 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                     da.Fill(ds, "Employee");
                 }
                 Log.Information("EmployeeRepository: DeleteEmployee  method execution completed successfully");
-                await _loggingFactory.AddLoggingMessages("UserName","information","EmployeeRepository: DeleteEmployee  method execution completed successfully");
+                await _loggingFactory.AddLoggingMessages(userName,"information","EmployeeRepository: DeleteEmployee  method execution completed successfully");
                 Log.Information($"EmployeeRepository: Employee with id {empid} deleted successfully");
-                await _loggingFactory.AddLoggingMessages("UserName","information",$"EmployeeRepository: Employee with id {empid} deleted successfully");
+                await _loggingFactory.AddLoggingMessages(userName,"information",$"EmployeeRepository: Employee with id {empid} deleted successfully");
                 return true;
             }
             else
@@ -89,7 +89,7 @@ namespace ADO.NET_MULTILAYER_API_Repositories
             var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
 
             Log.Information($"EmployeeRepository: GetEmployees method Excution Starts and Current Loggedin username:{userName}");
-            await _loggingFactory.AddLoggingMessages("UserName","information","EmployeeRepository: GetAllEmployees  method execution starts");
+            await _loggingFactory.AddLoggingMessages(userName,"information","EmployeeRepository: GetAllEmployees  method execution starts");
             using (SqlConnection con = _connectionFactory.hotelmanagement_UATsqlconnectionstring())
             {
                 SqlCommand cmd=new SqlCommand(StoredProcedures.GetEmployees, con);
@@ -107,7 +107,7 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                     employees.Add(emp);
                 }
                     Log.Information("EmployeeRepository: GetAllEmployees  method execution completed successfully");
-                    await _loggingFactory.AddLoggingMessages("UserName","information","EmployeeRepository: GetAllEmployees  method execution completed successfully");
+                    await _loggingFactory.AddLoggingMessages(userName,"information","EmployeeRepository: GetAllEmployees  method execution completed successfully");
                 return employees;
             }
         }
@@ -117,7 +117,7 @@ namespace ADO.NET_MULTILAYER_API_Repositories
             var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
 
             Log.Information($"EmployeeRepository: GetEmployeeById method Excution Starts and Current Loggedin username:{userName}");
-            await _loggingFactory.AddLoggingMessages("UserName", "information","EmployeeRepository: GetEmployeeById  method execution starts");
+            await _loggingFactory.AddLoggingMessages(userName, "information","EmployeeRepository: GetEmployeeById  method execution starts");
             Employee emp = new Employee();
 
             using (SqlConnection con = _connectionFactory.hotelmanagement_UATsqlconnectionstring())
@@ -136,7 +136,7 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                 }
             }
             Log.Information("EmployeeRepository: GetEmployeeById  method execution completed successfully");
-            await _loggingFactory.AddLoggingMessages("UserName", "information","EmployeeRepository: GetEmployeeById  method execution completed successfully");
+            await _loggingFactory.AddLoggingMessages(userName, "information","EmployeeRepository: GetEmployeeById  method execution completed successfully");
             return emp;
 
         }
@@ -145,7 +145,7 @@ namespace ADO.NET_MULTILAYER_API_Repositories
         {
             var userName = _httpContextAccessor.HttpContext?.User?.FindFirst("UserName")?.Value ?? "Unknown";
             Log.Information($"EmployeeRepository:UpdateEmployee  method Excution Starts and Current Loggedin username:{userName}");
-            await _loggingFactory.AddLoggingMessages("UserName", "information","EmployeeRepository: UpdateEmployee  method execution starts");
+            await _loggingFactory.AddLoggingMessages(userName, "information","EmployeeRepository: UpdateEmployee  method execution starts");
             var result = await GetEmployeeById(empdetail.empid);
             if (result.empid > 0)
             {
@@ -161,14 +161,14 @@ namespace ADO.NET_MULTILAYER_API_Repositories
                     DataSet ds = new DataSet();
                     da.Fill(ds, "Employee");
                     Log.Information("EmployeeRepository: UpdateEmployee  method execution completed successfully");
-                    await _loggingFactory.AddLoggingMessages("UserName", "information","EmployeeRepository: UpdateEmployee  method execution completed successfully");
+                    await _loggingFactory.AddLoggingMessages(userName, "information","EmployeeRepository: UpdateEmployee  method execution completed successfully");
                     return true;
                 }
             }
             else
             {
                 Log.Information($"EmployeeRepository: Employee with id {empdetail.empid} not found for update");
-                await _loggingFactory.AddLoggingMessages("UserName", "information",$"EmployeeRepository: Employee with id {empdetail.empid} not found for update");
+                await _loggingFactory.AddLoggingMessages(userName, "information",$"EmployeeRepository: Employee with id {empdetail.empid} not found for update");
                 return false;
             }
 

@@ -36,9 +36,9 @@ namespace ADO.NET_MULTILAYER_API.Controllers
             Log.Information($"EmployeeController:input parameter EmployeeSalary: {empdetail.empsalary}");
             #endregion
             #region databaselog
-            await _loggingFactory.AddLoggingMessages("UserName", "information", "EmployeeController:Employee PosT API method Execution started");
-            await _loggingFactory.AddLoggingMessages("UserName", "information", $"EmployeeController:input parameter EmployeeName: {empdetail.empname}");
-            await _loggingFactory.AddLoggingMessages("UserName", "information", $"EmployeeController:input parameter EmployeeSalary: {empdetail.empsalary}");
+            await _loggingFactory.AddLoggingMessages(userName, "information", "EmployeeController:Employee PosT API method Execution started");
+            await _loggingFactory.AddLoggingMessages(userName, "information", $"EmployeeController:input parameter EmployeeName: {empdetail.empname}");
+            await _loggingFactory.AddLoggingMessages(userName, "information", $"EmployeeController:input parameter EmployeeSalary: {empdetail.empsalary}");
             #endregion
 
             throw new Exception("Custom Exception:Employee Controller:Post API method failed");
@@ -50,7 +50,7 @@ namespace ADO.NET_MULTILAYER_API.Controllers
             else
             {
                 Log.Information("EmployeeController:Employee PosT API method Execution completed successfully");
-                await _loggingFactory.AddLoggingMessages("UserName", "information", "EmployeeController:Employee PosT API method Execution completed successfully");
+                await _loggingFactory.AddLoggingMessages(userName, "information", "EmployeeController:Employee PosT API method Execution completed successfully");
                 return StatusCode(StatusCodes.Status200OK, empData);
             }
         }
@@ -66,8 +66,8 @@ namespace ADO.NET_MULTILAYER_API.Controllers
             #endregion
 
             #region databaselog
-            await _loggingFactory.AddLoggingMessages("UserName", "information", "Employee Controller:Delete API method Execution Started");
-            await _loggingFactory.AddLoggingMessages("UserName", "information", $"EmployeeController:passed Input Parameter EmployeeId:{empid}");
+            await _loggingFactory.AddLoggingMessages(userName, "information", "Employee Controller:Delete API method Execution Started");
+            await _loggingFactory.AddLoggingMessages(userName, "information", $"EmployeeController:passed Input Parameter EmployeeId:{empid}");
             #endregion
             var result = await _employeeService.DeleteEmployee(empid);
             if (!result)
@@ -77,7 +77,7 @@ namespace ADO.NET_MULTILAYER_API.Controllers
             else
             {
                 Log.Information("Employee Controller:Delete API method Execution completed successfully");
-                await _loggingFactory.AddLoggingMessages("UserName", "information", "Employee Controller:Delete API method Execution completed successfully");
+                await _loggingFactory.AddLoggingMessages(userName, "information", "Employee Controller:Delete API method Execution completed successfully");
                 return StatusCode(StatusCodes.Status200OK, "Employee deleted successfully");
             }
         }
@@ -93,8 +93,8 @@ namespace ADO.NET_MULTILAYER_API.Controllers
             #endregion
 
             #region databaselog
-            await _loggingFactory.AddLoggingMessages("UserName", "information", "Employee Controller:GetEmployeeById API method Execution Started");
-            await _loggingFactory.AddLoggingMessages("UserName", "information", $"EmployeeController:passed Input Parameter EmployeeId:{empid}");
+            await _loggingFactory.AddLoggingMessages(userName, "information", "Employee Controller:GetEmployeeById API method Execution Started");
+            await _loggingFactory.AddLoggingMessages(userName, "information", $"EmployeeController:passed Input Parameter EmployeeId:{empid}");
             #endregion
             var empData = await _employeeService.GetEmployeeById(empid);
             if (empData == null)
@@ -147,9 +147,9 @@ namespace ADO.NET_MULTILAYER_API.Controllers
             Log.Information($"EmployeeController: GetEmployees Api method Excution Starts and Current Loggedin username:{userName}");
             #endregion
             #region databaselog
-            await _loggingFactory.AddLoggingMessages("UserName", "information", "Employee Controller:GetEmployees API method Execution Started");
+            await _loggingFactory.AddLoggingMessages(userName, "information", "Employee Controller:GetEmployees API method Execution Started");
             #endregion
-            throw new Exception("Custom Exception:Employee Controller:GetEmployees API method failed");
+            //throw new Exception("Custom Exception:Employee Controller:GetEmployees API method failed");
             var empData = await _employeeService.GetEmployees();
             if (empData == null || empData.Count == 0)
             {
@@ -158,7 +158,7 @@ namespace ADO.NET_MULTILAYER_API.Controllers
             else
             {
                 Log.Information("Employee Controller:GetEmployees API method Execution completed successfully");
-                await _loggingFactory.AddLoggingMessages("UserName", "information", "Employee Controller:GetEmployees API method Execution completed successfully");
+                await _loggingFactory.AddLoggingMessages(userName, "information", "Employee Controller:GetEmployees API method Execution completed successfully");
                 return StatusCode(StatusCodes.Status200OK, empData);
             }
         }
@@ -175,10 +175,10 @@ namespace ADO.NET_MULTILAYER_API.Controllers
             Log.Information($"EmployeeController:input parameter EmployeeSalary: {empdetail.empsalary}");
             #endregion
             #region databaselog
-            await _loggingFactory.AddLoggingMessages("UserName", "information", "Employee Controller:UpdateEmployee API method Execution Started");
-            await _loggingFactory.AddLoggingMessages("UserName", "information", $"EmployeeController:input parameter EmployeeId: {empdetail.empid}");
-            await _loggingFactory.AddLoggingMessages("UserName", "information", $"EmployeeController:input parameter EmployeeName: {empdetail.empname}");
-            await _loggingFactory.AddLoggingMessages("UserName", "information", $"EmployeeController:input parameter EmployeeSalary: {empdetail.empsalary}");
+            await _loggingFactory.AddLoggingMessages(userName, "information", "Employee Controller:UpdateEmployee API method Execution Started");
+            await _loggingFactory.AddLoggingMessages(userName, "information", $"EmployeeController:input parameter EmployeeId: {empdetail.empid}");
+            await _loggingFactory.AddLoggingMessages(userName,"information", $"EmployeeController:input parameter EmployeeName: {empdetail.empname}");
+            await _loggingFactory.AddLoggingMessages(userName, "information", $"EmployeeController:input parameter EmployeeSalary: {empdetail.empsalary}");
             #endregion
                 var result = await _employeeService.UpdateEmployee(empdetail);
                 if (!result)
@@ -188,7 +188,7 @@ namespace ADO.NET_MULTILAYER_API.Controllers
                 else
                 {
                     Log.Information("Employee Controller:UpdateEmployee API method Execution completed successfully");
-                    await _loggingFactory.AddLoggingMessages("UserName", "information", "Employee Controller:UpdateEmployee API method Execution completed successfully");
+                    await _loggingFactory.AddLoggingMessages(userName, "information", "Employee Controller:UpdateEmployee API method Execution completed successfully");
                     return StatusCode(StatusCodes.Status200OK, "Employee updated successfully");
                 }
             }
